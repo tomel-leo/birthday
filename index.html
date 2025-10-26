@@ -30,11 +30,9 @@ canvas { border: 1px solid #ccc; display: block; margin-bottom: 10px; }
 <div id="messages"></div>
 
 <script>
-  // ---------- CONFIG ----------
   const API_KEY = "$2a$10$FKS1xapYRR4LZQXFFWujpugfAsuAWBVvKuTNcfcQReZcgtz.9RTrC";
   const BIN_ID = "68fdee84ae596e708f2da104";
 
-  // Elements
   const form = document.getElementById('guestbookForm');
   const nameInput = document.getElementById('name');
   const wishInput = document.getElementById('wish');
@@ -64,7 +62,6 @@ canvas { border: 1px solid #ccc; display: block; margin-bottom: 10px; }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   });
 
-  // Load messages from JSONBin
   async function loadMessages() {
     try {
       const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
@@ -84,7 +81,6 @@ canvas { border: 1px solid #ccc; display: block; margin-bottom: 10px; }
     }
   }
 
-  // Submit new message
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const signatureData = canvas.toDataURL();
@@ -103,7 +99,7 @@ canvas { border: 1px solid #ccc; display: block; margin-bottom: 10px; }
       const messages = data.record || [];
       messages.push(newMessage);
 
-      // Save updated messages back to JSONBin
+      // Update bin
       await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
         method: "PUT",
         headers: {
@@ -113,11 +109,10 @@ canvas { border: 1px solid #ccc; display: block; margin-bottom: 10px; }
         body: JSON.stringify(messages)
       });
 
-      // Reset form
+      // Reset form and canvas
       form.reset();
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Reload messages
       loadMessages();
     } catch (err) {
       console.error("Error saving message:", err);
@@ -126,8 +121,5 @@ canvas { border: 1px solid #ccc; display: block; margin-bottom: 10px; }
 
   loadMessages();
 </script>
-
 </body>
 </html>
-
-
